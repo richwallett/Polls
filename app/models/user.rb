@@ -1,7 +1,16 @@
 class User < ActiveRecord::Base
   attr_accessible :username, :email
-  has_many :polls, :foreign_key => "creator_id"
-  has_many :answer_logs
+  has_many :polls, :foreign_key => "creator_id", :dependent => :destroy
+  has_many :answer_logs, :dependent => :destroy
+  validates :username, :email, :presence => true
+  validates :username, :email, :uniqueness => true
+
+  def self.login(name, email)
+    if User.find_by_username(name).nil?
+      User.create(:username => name, :email => email)
+    end
+    User.find_by_username(name)
+  end
 
   def create_poll(poll_name)
     polls.create(:name => poll_name)
@@ -12,14 +21,25 @@ class User < ActiveRecord::Base
   end
 
   def submit_answer(question_id, response_id)
-    answerlogs.create(
+    answer_logs.create(
       :response_id => response_id,
       :question_id => question_id
     )
   end
 
-
 end
+
+=begin
+has_many :polls
+SELECT *
+  FROM polls
+ WHERE polls.creator_id = "#{users.id}"
+
+has_many :answer_logs
+SELECT *
+  FROM answer_logs
+ WHERE answer_logs.user_id = "#{users.id}"
+=end
 
 # == Schema Information
 #
