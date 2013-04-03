@@ -4,12 +4,13 @@ class Poll < ActiveRecord::Base
   has_many :questions, :dependent => :destroy
   validates :name, :creator_id, :presence => true
 
-  def self.print_polls
-    polls = Poll.all.map do |poll|
+  def self.print_polls(user)
+    polls = user.untaken_polls.map do |poll|
       [poll.id, poll.name]
     end
     polls.each {|poll| puts "#{poll[0]}. #{poll[1]}"}
   end
+
 
   def create_question(question)
     questions.create(:question => question)

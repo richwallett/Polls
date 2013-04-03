@@ -1,7 +1,7 @@
 class Response < ActiveRecord::Base
-  attr_accessible :answer, :question_id, :poll_id
+  attr_accessible :answer, :question_id
   belongs_to :question
-  validates :question_id, :answer, :poll_id, :presence => true
+  validates :question_id, :answer, :presence => true
 end
 
 =begin

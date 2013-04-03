@@ -17,11 +17,12 @@ def take_questions(poll)
     puts
   end
   puts "Thank you for taking the poll."
+  puts ""
 end
 
 def take_poll
   puts "Which poll would you like to take?"
-  Poll.print_polls
+  Poll.print_polls(@logged_user)
   choice = gets.chomp.to_i
   poll = Poll.find(choice)
   take_questions(poll)
@@ -31,7 +32,20 @@ end
 def create_poll
   puts "What do you want to name your poll?"
   name = gets.chomp
-  self.create_poll(name)
+  poll = @logged_user.create_poll(name)
+  finished = false
+  until finished
+    puts "Please enter your question:"
+    question = gets.chomp
+    q = poll.create_question(question)
+    puts "Please enter the possible answers separated by commas."
+    puts "ex. Red, Blue, Green, Cat"
+    answers = gets.chomp.split(",")
+    q.create_responses(answers)
+    puts "Would you like to add another question? Y/N"
+    choice = gets.chomp.upcase
+    finished = true if choice == "N"
+  end
 end
 
 puts "What would you like to do?"

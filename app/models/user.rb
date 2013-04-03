@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
     polls.create(:name => poll_name)
   end
 
-  def polls_taken
+  def taken_polls
     AnswerLog.where(:user_id => self.id)
   end
 
@@ -25,6 +25,13 @@ class User < ActiveRecord::Base
       :response_id => response_id,
       :question_id => question_id
     )
+  end
+
+  def untaken_polls
+    questions = Question.joins(:answer_logs).where("user_id != ?", self.id)
+    questions.map do |question|
+      question.poll
+    end.uniq
   end
 
 end

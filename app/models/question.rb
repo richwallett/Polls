@@ -5,7 +5,7 @@ class Question < ActiveRecord::Base
   has_many :answer_logs, :dependent => :destroy
   validates :poll_id, :question, :presence => true
 
-  def create_responses(*answers)
+  def create_responses(answers)
     answers.each do |answer|
       responses.create(:answer => answer)
     end
