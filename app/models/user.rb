@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   end
 
   def create_poll(poll_name, team_id = nil)
-    polls.create(:name => poll_name, :team_id => team_id)
+    polls.create!(:name => poll_name, :team_id => team_id)
   end
 
   def taken_polls
@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   end
 
   def submit_answer(question_id, response_id)
-    answer_logs.create(
+    answer_logs.create!(
       :response_id => response_id,
       :question_id => question_id
     )
@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
                        question.poll.team_id == nil
     end.uniq.delete_if { |item| item.is_a?(Question) }
   end
+  # This needs to be changed to SQL - Left Outer Join
+  # Also, the last line is insane - Ned
 
 end
 

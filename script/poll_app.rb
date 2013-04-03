@@ -11,7 +11,7 @@ def take_questions(poll)
     puts "#{questions[i].question}"
     responses[i].each {|response| puts "#{response.id}. #{response.answer}"}
     choice = gets.chomp.to_i
-    @logged_user.submit_answer(questions[i].id, responses[i][choice])
+    @logged_user.submit_answer(questions[i].id, choice)
     puts
   end
   puts "Thank you for taking the poll."
