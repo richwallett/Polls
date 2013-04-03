@@ -1,5 +1,5 @@
 class Poll < ActiveRecord::Base
-  attr_accessible :creator_id, :name
+  attr_accessible :creator_id, :name, :team_id
   belongs_to :user, :foreign_key => :creator_id
   has_many :questions, :dependent => :destroy
   validates :name, :creator_id, :presence => true

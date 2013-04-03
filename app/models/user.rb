@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :username, :email
+  attr_accessible :username, :email, :team_id
   has_many :polls, :foreign_key => "creator_id", :dependent => :destroy
   has_many :answer_logs, :dependent => :destroy
   validates :username, :email, :presence => true
@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
     User.find_by_username(name)
   end
 
-  def create_poll(poll_name)
-    polls.create(:name => poll_name)
+  def create_poll(poll_name, team_id = nil)
+    polls.create(:name => poll_name, :team_id => team_id)
   end
 
   def taken_polls
@@ -32,8 +32,9 @@ class User < ActiveRecord::Base
   def untaken_polls
     questions = Question.joins(:answer_logs).where("user_id != ?", self.id)
     questions.map do |question|
-      question.poll
-    end.uniq
+      question.poll if question.poll.team_id == self.team_id ||
+                       question.poll.team_id == nil
+    end.uniq.delete_if { |item| item.is_a?(Question) }
   end
 
 end
