@@ -1,8 +1,6 @@
 puts "Please enter your username:"
 username = gets.chomp
-puts "Please enter your email:"
-email = gets.chomp
-@logged_user = User.login(username, email)
+@logged_user = User.login(username)
 input = nil
 
 

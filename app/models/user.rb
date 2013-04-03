@@ -5,9 +5,11 @@ class User < ActiveRecord::Base
   validates :username, :email, :presence => true
   validates :username, :email, :uniqueness => true
 
-  def self.login(name, email)
+  def self.login(name)
     if User.find_by_username(name).nil?
-      User.create(:username => name, :email => email)
+      puts "Please enter your email:"
+      email = gets.chomp
+      User.create!(:username => name, :email => email)
     end
     User.find_by_username(name)
   end
